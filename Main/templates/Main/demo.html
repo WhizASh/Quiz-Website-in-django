@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body>
+    <div id="upper" style="display: flex; align-items: center;margin-top:-10px">
+      <a href="{% url 'Home' %}" class="exit"
+        ><button class="E_btn">Exit</button></a
+      >
+      <h4 id="counter" style="padding-left: 10px; padding-bottom: 0px"></h4>
+    </div>
+
+    <center>
+      <div class="container">
+        {{ context_var|safe }} {% autoescape off %}
+        <h3>{{q.question}}</h3>
+        {% for i in q.options %}
+        <h4 id="show">
+          <button class="btn" onclick="check(this)">{{i}}</button>
+        </h4>
+        {% endfor %} {% endautoescape %}
+      </div>
+    </center>
+
+    <div style="float: right">
+      <a href="{% url 'infinity_play' %}"
+        ><button class="E_btn">NEXT</button></a
+      >
+    </div>
+  </body>
+  <script>
+    var c = 0;
+    var attempts = 0;
+    function check(selectedOption) {
+      var answer = "{{q.answer}}";
+      c++;
+      attempts++;
+      if (c == 4) {
+        document.getElementById("counter").innerHTML =
+          "All Attempts exhausted ";
+      }
+      if (c == 3) {
+        document.getElementById("counter").innerHTML = "Last Attempt ";
+      }
+      if (c == 2) {
+        document.getElementById("counter").innerHTML = "1 Attempt Remaining  ";
+      }
+      if (c == 1) {
+        document.getElementById("counter").innerHTML = "2 Attempts Remaining ";
+      } else {
+        //show the total score page
+      }
+      if (attempts <= 3) {
+        if (selectedOption.textContent === answer) {
+          selectedOption.classList.add("correct");
+          document.getElementById("counter").innerHTML = "congratualtion ";
+          //show the congratualtion text
+        } else {
+          // Optional: Provide feedback for incorrect answers
+          selectedOption.classList.add("incorrect");
+        }
+      }
+    }
+  </script>
+</html>
